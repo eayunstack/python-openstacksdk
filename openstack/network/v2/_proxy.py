@@ -26,7 +26,9 @@ from openstack.network.v2 import metering_label_rule as _metering_label_rule
 from openstack.network.v2 import network as _network
 from openstack.network.v2 import network_ip_availability
 from openstack.network.v2 import pool as _pool
+from openstack.network.v2 import pool_v1 as _pool_v1
 from openstack.network.v2 import pool_member as _pool_member
+from openstack.network.v2 import pool_member_v1 as _pool_member_v1
 from openstack.network.v2 import port as _port
 from openstack.network.v2 import qos_bandwidth_limit_rule as \
     _qos_bandwidth_limit_rule
@@ -1202,6 +1204,20 @@ class Proxy(proxy2.BaseProxy):
         return self._find(_pool.Pool, name_or_id,
                           ignore_missing=ignore_missing)
 
+    def find_pool_v1(self, name_or_id, ignore_missing=True):
+        """Find a single pool, The function support loadbance v1 version
+
+        :param name_or_id: The name or ID of a pool.
+        :param bool ignore_missing: When set to ``False``
+                    :class:`~openstack.exceptions.ResourceNotFound` will be
+                    raised when the resource does not exist.
+                    When set to ``True``, None will be returned when
+                    attempting to find a nonexistent resource.
+        :returns: One :class:`~openstack.network.v2.pool_v1.Pool` or None
+        """
+        return self._find(_pool_v1.Pool, name_or_id,
+                          ignore_missing=ignore_missing)
+
     def get_pool(self, pool):
         """Get a single pool
 
@@ -1270,6 +1286,24 @@ class Proxy(proxy2.BaseProxy):
         return self._create(_pool_member.PoolMember, pool_id=poolobj.id,
                             **attrs)
 
+    def create_pool_member_v1(self, pool, **attrs):
+        """Create a new pool member from attributes, The function
+        support loadbance v1 version
+
+        :param pool: The pool can be either the ID of a pool or a
+                     :class:`~openstack.network.v2.pool_v.Pool` instance that
+                     the member will be created in.
+        :param dict attrs: Keyword arguments which will be used to create
+            a :class:`~openstack.network.v2.pool_member_v1.PoolMember`,
+            comprised of the properties on the PoolMember class.
+
+        :returns: The results of pool member creation
+        :rtype: :class:`~openstack.network.v2.pool_member_v1.PoolMember`
+        """
+        poolobj = self._get_resource(_pool_v1.Pool, pool)
+        return self._create(_pool_member_v1.PoolMember, pool_id=poolobj.id,
+                            **attrs)
+
     def delete_pool_member(self, pool_member, pool, ignore_missing=True):
         """Delete a pool member
 
@@ -1290,6 +1324,23 @@ class Proxy(proxy2.BaseProxy):
         poolobj = self._get_resource(_pool.Pool, pool)
         self._delete(_pool_member.PoolMember, pool_member,
                      ignore_missing=ignore_missing, pool_id=poolobj.id)
+
+    def delete_pool_member_v1(self, pool_member, ignore_missing=True):
+        """Delete a pool member, The function support loadbance v1 version
+
+        :param pool_member:
+            The member can be either the ID of a pool member or a
+            :class:`~openstack.network.v2.pool_member_v1.PoolMember` instance.
+        :param bool ignore_missing: When set to ``False``
+                    :class:`~openstack.exceptions.ResourceNotFound` will be
+                    raised when the pool member does not exist.
+                    When set to ``True``, no exception will be set when
+                    attempting to delete a nonexistent pool member.
+
+        :returns: ``None``
+        """
+        self._delete(_pool_member_v1.PoolMember, pool_member,
+                     ignore_missing=ignore_missing)
 
     def find_pool_member(self, name_or_id, pool, ignore_missing=True):
         """Find a single pool member
