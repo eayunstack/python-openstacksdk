@@ -89,6 +89,17 @@ class Node(resource.Resource):
         resp = session.post(url, endpoint_filter=self.service, json=body)
         return resp.json()
 
+    def remove(self, session, **params):
+        """An action procedure for the node to check its health status.
+
+        :param session: A session object used for sending request.
+        :returns: A dictionary containing the action ID.
+        """
+        body = {
+            'remove': params
+        }
+        return self._action(session, body)
+
     def check(self, session, **params):
         """An action procedure for the node to check its health status.
 

@@ -473,6 +473,17 @@ class Proxy(proxy2.BaseProxy):
         """
         return self._delete(_node.Node, node, ignore_missing=ignore_missing)
 
+    def remove_node(self, node, **params):
+        """remove a node from senlin to be a nova instance.
+
+        :param node: The value can be either the ID of a node or a
+            :class:`~openstack.cluster.v1.node.Node` instance.
+
+        :returns: A dictionary containing the action ID.
+        """
+        obj = self._get_resource(_node.Node, node)
+        return obj.remove(self.session, **params)
+
     def check_node(self, node, **params):
         """check a node.
 
