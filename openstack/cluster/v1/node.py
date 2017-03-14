@@ -100,6 +100,28 @@ class Node(resource.Resource):
         }
         return self._action(session, body)
 
+    def set_protect(self, session, **params):
+        """An action procedure to protect node not be delete.
+
+        :param session: A session object used for sending request.
+        :returns: A dictionary containing the action ID.
+        """
+        body = {
+            'set_protect': params
+        }
+        return self._action(session, body)
+
+    def remove_protect(self, session, **params):
+        """An action procedure remove protected status. of the node
+
+        :param session: A session object used for sending request.
+        :returns: A dictionary containing the action ID.
+        """
+        body = {
+            'remove_protect': params
+        }
+        return self._action(session, body)
+
     def check(self, session, **params):
         """An action procedure for the node to check its health status.
 
