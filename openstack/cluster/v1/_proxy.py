@@ -477,12 +477,34 @@ class Proxy(proxy2.BaseProxy):
         """remove a node from senlin to be a nova instance.
 
         :param node: The value can be either the ID of a node or a
-            :class:`~openstack.cluster.v1.node.Node` instance.
+        :class:`~openstack.cluster.v1.node.Node` instance.
 
         :returns: A dictionary containing the action ID.
         """
         obj = self._get_resource(_node.Node, node)
         return obj.remove(self.session, **params)
+
+    def set_protect_node(self, node, **params):
+        """Set the node to protected status to protect the node not be delete.
+
+        :param node: The value can be either the ID of a node or a
+        :class:`~openstack.cluster.v1.node.Node` instance.
+
+        :returns: A dictionary containing the action ID.
+        """
+        obj = self._get_resource(_node.Node, node)
+        return obj.set_protect(self.session, **params)
+
+    def remove_protect_node(self, node, **params):
+        """Remove the protected node's protected status.
+
+        :param node: The value can be either the ID of a node or a
+        :class:`~openstack.cluster.v1.node.Node` instance.
+
+        :returns: A dictionary containing the action ID.
+        """
+        obj = self._get_resource(_node.Node, node)
+        return obj.remove_protect(self.session, **params)
 
     def check_node(self, node, **params):
         """check a node.
