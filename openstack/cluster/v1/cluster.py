@@ -163,3 +163,15 @@ class Cluster(resource.Resource):
             'recover': params
         }
         return self.action(session, body)
+
+    def suspend(self, session, **params):
+        body = {
+            'suspend': params
+        }
+        return self.action(session, body)
+
+    def resume(self, session, **params):
+        body = {
+            'resume': params
+        }
+        return self.action(session, body)
