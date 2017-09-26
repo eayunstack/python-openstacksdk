@@ -122,6 +122,17 @@ class Node(resource.Resource):
         }
         return self._action(session, body)
 
+    def reset_state(self, session, **params):
+        """An action procedure reset state node status. of the node
+
+        :param session: A session object used for sending request.
+        :returns: A dictionary containing the action ID.
+        """
+        body = {
+            'reset_state': params
+        }
+        return self._action(session, body)
+
     def check(self, session, **params):
         """An action procedure for the node to check its health status.
 
