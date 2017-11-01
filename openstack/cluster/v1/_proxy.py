@@ -22,8 +22,10 @@ from openstack.cluster.v1 import policy_type as _policy_type
 from openstack.cluster.v1 import profile as _profile
 from openstack.cluster.v1 import profile_type as _profile_type
 from openstack.cluster.v1 import receiver as _receiver
+from openstack.cluster.v1 import service as _service
 from openstack import proxy2
 from openstack import resource2
+from openstack import utils
 
 
 class Proxy(proxy2.BaseProxy):
@@ -446,6 +448,32 @@ class Proxy(proxy2.BaseProxy):
         obj = self._get_resource(_cluster.Cluster, cluster)
         return obj.recover(self.session, **params)
 
+    def suspend_cluster(self, cluster, **params):
+        """suspend a cluster.
+
+        :param cluster: The value can be either the ID of a cluster or a
+            :class:`~openstack.cluster.v1.cluster.Cluster` instance.
+        :param dict \*\*params: A dictionary providing the parameters for the
+            check action.
+
+        :returns: A dictionary containing the action ID.
+        """
+        obj = self._get_resource(_cluster.Cluster, cluster)
+        return obj.suspend(self.session, **params)
+
+    def resume_cluster(self, cluster, **params):
+        """resume a cluster.
+
+        :param cluster: The value can be either the ID of a cluster or a
+            :class:`~openstack.cluster.v1.cluster.Cluster` instance.
+        :param dict \*\*params: A dictionary providing the parameters for the
+            check action.
+
+        :returns: A dictionary containing the action ID.
+        """
+        obj = self._get_resource(_cluster.Cluster, cluster)
+        return obj.resume(self.session, **params)
+
     def create_node(self, **attrs):
         """Create a new node from attributes.
 
@@ -472,6 +500,50 @@ class Proxy(proxy2.BaseProxy):
         :rtype: :class:`~openstack.cluster.v1.node.Node`.
         """
         return self._delete(_node.Node, node, ignore_missing=ignore_missing)
+
+    def remove_node(self, node, **params):
+        """remove a node from senlin to be a nova instance.
+
+        :param node: The value can be either the ID of a node or a
+        :class:`~openstack.cluster.v1.node.Node` instance.
+
+        :returns: A dictionary containing the action ID.
+        """
+        obj = self._get_resource(_node.Node, node)
+        return obj.remove(self.session, **params)
+
+    def set_protect_node(self, node, **params):
+        """Set the node to protected status to protect the node not be delete.
+
+        :param node: The value can be either the ID of a node or a
+        :class:`~openstack.cluster.v1.node.Node` instance.
+
+        :returns: A dictionary containing the action ID.
+        """
+        obj = self._get_resource(_node.Node, node)
+        return obj.set_protect(self.session, **params)
+
+    def remove_protect_node(self, node, **params):
+        """Remove the protected node's protected status.
+
+        :param node: The value can be either the ID of a node or a
+        :class:`~openstack.cluster.v1.node.Node` instance.
+
+        :returns: A dictionary containing the action ID.
+        """
+        obj = self._get_resource(_node.Node, node)
+        return obj.remove_protect(self.session, **params)
+
+    def reset_node_state(self, node, **params):
+        """Reset state node status.
+
+        :param node: The value can be either the ID of a node or a
+        :class:`~openstack.cluster.v1.node.Node` instance.
+
+        :returns: A dictionary containing the action ID.
+        """
+        obj = self._get_resource(_node.Node, node)
+        return obj.reset_state(self.session, **params)
 
     def check_node(self, node, **params):
         """check a node.
@@ -711,6 +783,18 @@ class Proxy(proxy2.BaseProxy):
         """
         return self._create(_receiver.Receiver, **attrs)
 
+    def update_receiver(self, receiver, **attrs):
+        """Update a receiver.
+
+        :param receiver: The value can be either the name or ID of a receiver
+            or a :class:`~openstack.cluster.v1.receiver.Receiver` instance.
+        :param attrs: The attributes to update on the receiver parameter.
+            Valid attribute names include ``name``, ``action`` and ``params``.
+        :returns: The updated receiver.
+        :rtype: :class:`~openstack.cluster.v1.receiver.Receiver`
+        """
+        return self._update(_receiver.Receiver, receiver, **attrs)
+
     def delete_receiver(self, receiver, ignore_missing=True):
         """Delete a receiver.
 
@@ -854,3 +938,11 @@ class Proxy(proxy2.BaseProxy):
         :returns: A generator of event instances.
         """
         return self._list(_event.Event, paginated=True, **query)
+
+    def services(self, **query):
+        """Get a generator of service.
+
+        :returns: A generator of objects that are of type
+                  :class:`~openstack.cluster.v1.service.Service`
+        """
+        return self._list(_service.Service, paginated=False, **query)

@@ -89,6 +89,50 @@ class Node(resource.Resource):
         resp = session.post(url, endpoint_filter=self.service, json=body)
         return resp.json()
 
+    def remove(self, session, **params):
+        """An action procedure for the node to check its health status.
+
+        :param session: A session object used for sending request.
+        :returns: A dictionary containing the action ID.
+        """
+        body = {
+            'remove': params
+        }
+        return self._action(session, body)
+
+    def set_protect(self, session, **params):
+        """An action procedure to protect node not be delete.
+
+        :param session: A session object used for sending request.
+        :returns: A dictionary containing the action ID.
+        """
+        body = {
+            'set_protect': params
+        }
+        return self._action(session, body)
+
+    def remove_protect(self, session, **params):
+        """An action procedure remove protected status. of the node
+
+        :param session: A session object used for sending request.
+        :returns: A dictionary containing the action ID.
+        """
+        body = {
+            'remove_protect': params
+        }
+        return self._action(session, body)
+
+    def reset_state(self, session, **params):
+        """An action procedure reset state node status. of the node
+
+        :param session: A session object used for sending request.
+        :returns: A dictionary containing the action ID.
+        """
+        body = {
+            'reset_state': params
+        }
+        return self._action(session, body)
+
     def check(self, session, **params):
         """An action procedure for the node to check its health status.
 

@@ -74,6 +74,8 @@ class Cluster(resource.Resource):
     node_ids = resource.Body('nodes')
     #: Name of the profile used by the cluster.
     profile_name = resource.Body('profile_name')
+    #: Specify whether the cluster update should only pertain to the profile.
+    is_profile_only = resource.Body('profile_only', type=bool)
     #: A dictionary with dependency information of the cluster
     dependents = resource.Body('dependents', type=dict)
 
@@ -161,5 +163,17 @@ class Cluster(resource.Resource):
     def recover(self, session, **params):
         body = {
             'recover': params
+        }
+        return self.action(session, body)
+
+    def suspend(self, session, **params):
+        body = {
+            'suspend': params
+        }
+        return self.action(session, body)
+
+    def resume(self, session, **params):
+        body = {
+            'resume': params
         }
         return self.action(session, body)
