@@ -73,6 +73,8 @@ class Volume(resource2.Resource):
     attachments = resource2.Body("attachments")
     #: The timestamp of this volume creation.
     created_at = resource2.Body("created_at")
+    #: Block One or more metadata key and value pairs about image
+    volume_image_metadata = resource2.Body("volume_image_metadata")
 
 
 class VolumeDetail(Volume):
