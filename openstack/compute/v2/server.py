@@ -192,11 +192,13 @@ class Server(resource2.Resource, metadata.MetadataMixin):
                 access_ipv4=None, access_ipv6=None,
                 metadata=None, personality=None):
         """Rebuild the server with the given arguments."""
-        action = {
-            'name': name,
-            'adminPass': admin_password,
-            'preserve_ephemeral': preserve_ephemeral
-        }
+        action = {}
+        if name is not None:
+            action['name'] = name
+        if admin_password is not None:
+            action['adminPass'] = admin_password
+        if preserve_ephemeral is not None:
+            action['preserve_ephemeral'] = preserve_ephemeral
         if image is not None:
             action['imageRef'] = resource2.Resource._get_id(image)
         if access_ipv4 is not None:
