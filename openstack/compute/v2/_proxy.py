@@ -462,33 +462,18 @@ class Proxy(proxy2.BaseProxy):
         server = self._get_resource(_server.Server, server)
         server.reboot(self.session, reboot_type)
 
-    def rebuild_server(self, server, name, admin_password, **attrs):
+    def rebuild_server(self, server, image):
         """Rebuild a server
 
         :param server: Either the ID of a server or a
                        :class:`~openstack.compute.v2.server.Server` instance.
-        :param str name: The name of the server
-        :param str admin_password: The administrator password
-        :param bool preserve_ephemeral: Indicates whether the server
-            is rebuilt with the preservation of the ephemeral partition.
-            *Default: False*
-        :param str image: The id of an image to rebuild with. *Default: None*
-        :param str access_ipv4: The IPv4 address to rebuild with.
-                                *Default: None*
-        :param str access_ipv6: The IPv6 address to rebuild with.
-                                *Default: None*
-        :param dict metadata: A dictionary of metadata to rebuild with.
-                               *Default: None*
-        :param personality: A list of dictionaries, each including a
-                            **path** and **contents** key, to be injected
-                            into the rebuilt server at launch.
-                            *Default: None*
 
+        :param str image: The id of an image to rebuild with. *Default: None*
         :returns: The rebuilt :class:`~openstack.compute.v2.server.Server`
                   instance.
         """
         server = self._get_resource(_server.Server, server)
-        return server.rebuild(self.session, name, admin_password, **attrs)
+        return server.rebuild(self.session, image)
 
     def resize_server(self, server, flavor):
         """Resize a server
